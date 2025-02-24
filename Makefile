@@ -1,17 +1,21 @@
+NAME=inception
+FILE=srcs/docker-compose.yml
+
+
 all:
-	@docker compose -f ./srcs/docker-compose.yml up -d --build
+	mkdir -p /home/${USER}/data/mariadb
+	mkdir -p /home/${USER}/data/wordpress
+	docker compose -f $(FILE) -p $(NAME) up -d --build
 
 down:
-	@docker compose -f ./srcs/docker-compose.yml down
+	docker compose -f $(FILE) -p $(NAME) down
 
-re:
-	@docker compose -f ./srcs/docker-compose.yml up -d --build
+re: down all
 
 clean: down
-	@docker stop $$(docker ps -qa);\
-	docker rm $$(docker ps -qa);\
-	docker rmi -f $$(docker images -qa);\
-	docker volume rm $$(docker volume ls -q);\
-	docker network rm $$(docker network ls -q);\
+	docker rmi $(NAME)-mariadb $(NAME)-wordpress $(NAME)-nginx; \
+	docker volume rm $(NAME)-mariadb $(NAME)-wordpress; \
+	sudo rm -rf /home/${USER}/data/mariadb; \
+	sudo rm -rf /home/${USER}/data/wordpress;
 
 .PHONY: all re down clean
