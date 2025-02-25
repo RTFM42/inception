@@ -8,4 +8,4 @@ if [ ! -d /var/www/html ]; then
     chmod 1777 /var/www/html
 fi
 
-exec gosu www-data "$@"
+exec "$@"

@@ -17,15 +17,6 @@ EORUN
 
 FROM base
 SHELL [ "/bin/bash", "-c" ]
-# Install gosu
-RUN <<EORUN
-set -eux
-apt-get update
-apt-get install -y gosu
-rm -rf /var/lib/apt/lists/*
-# verify that the binary works
-gosu nobody true
-EORUN
 RUN <<EORUN
 set -eux
 apt-get update
