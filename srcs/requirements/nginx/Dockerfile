@@ -36,6 +36,7 @@ rm -rf /var/lib/apt/lists/*
 EORUN
 
 COPY docker-entrypoint.sh /usr/local/bin/
+COPY default.conf /etc/nginx/conf.d/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 

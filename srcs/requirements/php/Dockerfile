@@ -30,7 +30,7 @@ curl -fsSL https://mirror.cat.net/sury/php/apt.gpg | gpg --dearmor -o /etc/apt/t
 echo "deb https://mirror.cat.net/sury/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 apt-get update
 apt-get upgrade -y
-apt-get install -y php8.4-fpm
+apt-get install -y php8.4-fpm unzip
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 EORUN
@@ -40,10 +40,6 @@ RUN <<EORUN
 set -eux
 mkdir -p "$PHP_INI_DIR/conf.d"
 mkdir /run/php
-[ ! -d /var/www/html ];
-mkdir -p /var/www/html
-chown www-data:www-data /var/www/html
-chmod 1777 /var/www/html
 EORUN
 
 COPY docker-entrypoint.sh /usr/local/bin/

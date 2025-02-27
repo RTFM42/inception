@@ -25,7 +25,7 @@ services:
     networks: [inception]
     restart: always
     ports: [443:443, 80:80]
-    depends_on: [wordpress]
+    depends_on: [php]
 volumes:
   www-volume:
     name: inception-www
