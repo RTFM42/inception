@@ -26,8 +26,8 @@ Pin-Priority: 900
 EOF
 apt-get update
 apt-get install -y apt-transport-https lsb-release ca-certificates curl gnupg
-curl -fsSL https://mirror.cat.net/sury/php/apt.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/php.gpg
-echo "deb https://mirror.cat.net/sury/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+curl -fsSL https://packages.sury.org/php/apt.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/php.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 apt-get update
 apt-get upgrade -y
 apt-get install -y php8.4-fpm unzip
