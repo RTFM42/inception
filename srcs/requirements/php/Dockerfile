@@ -7,7 +7,7 @@ RUN <<EORUN
 set -eux
 apt-get update
 apt-get install ca-certificates apt-utils -y
-sed -i 's/^deb http:\/\/deb.debian.org\/debian /deb https:\/\/ftp.udx.icscoe.jp\/Linux\/debian /g' /etc/apt/sources.list
+sed -i 's|^deb http://deb.debian.org/debian |deb https://ftp.udx.icscoe.jp/Linux/debian |g' /etc/apt/sources.list
 apt-get update
 apt-get upgrade -y
 apt-get clean
@@ -30,17 +30,16 @@ curl -fsSL https://packages.sury.org/php/apt.gpg | gpg --dearmor -o /etc/apt/tru
 echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 apt-get update
 apt-get upgrade -y
-apt-get install -y php8.4-fpm unzip
+apt-get install -y unzip php-fpm php-mysql php-gd php-cli php-mbstring
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 EORUN
 
-ENV PHP_INI_DIR=/usr/local/etc/php
-RUN <<EORUN
-set -eux
-mkdir -p "$PHP_INI_DIR/conf.d"
-mkdir /run/php
-EORUN
+RUN mkdir /run/php
+RUN cp /etc/php/8.3/fpm/pool.d/www.conf /etc/php/8.3/fpm/pool.d/www.conf.bak
+RUN sed -i 's|^listen = /run/php/.*|listen = 9000|' /etc/php/8.3/fpm/pool.d/www.conf
+RUN sed -i '/^listen.owner = www-data/d' /etc/php/8.3/fpm/pool.d/www.conf
+RUN sed -i '/^listen.group = www-data/d' /etc/php/8.3/fpm/pool.d/www.conf
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -49,4 +48,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 STOPSIGNAL SIGQUIT
 EXPOSE 9000
 
-CMD [ "php-fpm8.4", "-F" ]
+CMD [ "php-fpm8.3", "-F" ]

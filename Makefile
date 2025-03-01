@@ -14,9 +14,11 @@ re: down all
 
 clean: down
 	docker rmi $(NAME)-mariadb $(NAME)-php $(NAME)-nginx; \
-	docker builder prune -f; \
 	docker volume rm $(NAME)-mariadb $(NAME)-www; \
 	sudo rm -rf /home/${USER}/data/mariadb; \
 	sudo rm -rf /home/${USER}/data/www;
+
+fclean: clean
+	yes | docker system prune --all
 
 .PHONY: all re down clean
