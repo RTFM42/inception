@@ -1,19 +1,18 @@
 services:
   mariadb:
     build:
-      context: ./requirements/mariadb
+      context: srcs/requirements/mariadb
       dockerfile: Dockerfile
     volumes: [ mariadb-volume:/var/lib/mysql ]
     networks: [ inception ]
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-"wordpress"}
       MYSQL_USER: ${MYSQL_USER:-"wordpress"}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-}
+    secrets: [ mysql_password, mysql_root_password ]
   php:
     build:
-      context: ./requirements/php
+      context: srcs/requirements/php
       dockerfile: Dockerfile
     volumes: [ www-volume:/var/www/html ]
     networks: [ inception ]
@@ -21,7 +20,7 @@ services:
     depends_on: [ mariadb ]
   nginx:
     build:
-      context: ./requirements/nginx
+      context: srcs/requirements/nginx
       dockerfile: Dockerfile
     volumes: [ www-volume:/var/www/html ]
     networks: [ inception ]
@@ -46,3 +45,8 @@ volumes:
 networks:
   inception:
     name: inception
+secrets:
+  mysql_password:
+    file: secrets/db_password.txt
+  mysql_root_password:
+    file: secrets/db_root_password.txt
