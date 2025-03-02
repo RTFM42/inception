@@ -39,6 +39,8 @@ apt-get remove -y curl
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 EORUN
+RUN cp /etc/mysql/mariadb.conf.d/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf.bak
+RUN sed -i 's|^bind-address            = 127.0.0.1|bind-address            = 0.0.0.0|g' /etc/mysql/mariadb.conf.d/50-server.cnf
 RUN rm -rf /var/lib/mysql
 RUN mkdir -p /run/mysqld /var/lib/mysql
 RUN chown -R mysql:mysql /run/mysqld

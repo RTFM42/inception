@@ -3,26 +3,26 @@ services:
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
-    volumes: [mariadb-volume:/var/lib/mysql]
-    networks: [inception]
+    volumes: [ mariadb-volume:/var/lib/mysql ]
+    networks: [ inception ]
     restart: always
   php:
     build:
       context: ./requirements/php
       dockerfile: Dockerfile
-    volumes: [www-volume:/var/www/html]
-    networks: [inception]
+    volumes: [ www-volume:/var/www/html ]
+    networks: [ inception ]
     restart: always
-    depends_on: [mariadb]
+    depends_on: [ mariadb ]
   nginx:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-    volumes: [www-volume:/var/www/html]
-    networks: [inception]
+    volumes: [ www-volume:/var/www/html ]
+    networks: [ inception ]
     restart: always
-    ports: [443:443, 80:80]
-    depends_on: [php]
+    ports: [ 443:443, 80:80 ]
+    depends_on: [ php ]
 volumes:
   www-volume:
     name: inception-www

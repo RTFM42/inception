@@ -5,7 +5,11 @@ FILE=srcs/docker-compose.yml
 all:
 	mkdir -p /home/${USER}/data/mariadb
 	mkdir -p /home/${USER}/data/www
-	docker compose -f $(FILE) -p $(NAME) up -d --build
+	if [ -e .env ]; then \
+		docker compose -f $(FILE) -p $(NAME) up -d --build; \
+	else \
+		docker compose -f $(FILE) -p $(NAME) up -d --build; \
+	fi
 
 down:
 	docker compose -f $(FILE) -p $(NAME) down
