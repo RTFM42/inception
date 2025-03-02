@@ -6,7 +6,7 @@ all:
 	mkdir -p /home/${USER}/data/mariadb
 	mkdir -p /home/${USER}/data/www
 	if [ -e .env ]; then \
-		docker compose -f $(FILE) -p $(NAME) up -d --build; \
+		docker compose -f $(FILE) -p $(NAME) --env-file .env up -d --build; \
 	else \
 		docker compose -f $(FILE) -p $(NAME) up -d --build; \
 	fi

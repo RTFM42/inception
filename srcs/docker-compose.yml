@@ -6,6 +6,11 @@ services:
     volumes: [ mariadb-volume:/var/lib/mysql ]
     networks: [ inception ]
     restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-"wordpress"}
+      MYSQL_USER: ${MYSQL_USER:-"wordpress"}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-}
   php:
     build:
       context: ./requirements/php
