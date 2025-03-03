@@ -26,6 +26,17 @@ if [ ! -d /var/www/html/wordpress ]; then
     sed -i "s|^define( 'LOGGED_IN_SALT',   'put your unique phrase here' );|define( 'LOGGED_IN_SALT',   '$(openssl rand -hex 20)' );|g" /var/www/html/wordpress/wp-config.php
     sed -i "s|^define( 'NONCE_SALT',       'put your unique phrase here' );|define( 'NONCE_SALT',       '$(openssl rand -hex 20)' );|g" /var/www/html/wordpress/wp-config.php
     chmod 1777 /var/www/html/wordpress
+    if [ -e /run/secrets/wp_credentials ]; then
+        set -a
+        source /run/secrets/wp_credentials
+        set +a
+    fi
+    if [ -n "$DOMAIN_NAME" ] && [ -n "$WP_TITLE" ] && [ -n "$WP_ADMIN" ] && [ -n "$WP_ADMIN_PASSWORD" ] && [ -n "$WP_ADMIN_EMAIL" ]; then
+        wp core install --url="https://${DOMAIN_NAME}/" --title="${WP_TITLE}" --admin_user="${WP_ADMIN}" --admin_password="${WP_ADMIN_PASSWORD}" --admin_email="${WP_ADMIN_EMAIL}" --path="/var/www/html/wordpress" --allow-root
+    fi
+    if [ -n "$WP_USERNAME" ] && [ -n "$WP_EMAIL" ] && [ -n "$WP_PASSWORD" ] && [ -n "$WP_DISPLYNAME" ]; then
+        wp user create "$WP_USERNAME" "$WP_EMAIL" --role=author --user_pass="$WP_PASSWORD" --display_name="$WP_DISPLYNAME" --path="/var/www/html/wordpress" --allow-root
+    fi
 fi
 
 exec "$@"
