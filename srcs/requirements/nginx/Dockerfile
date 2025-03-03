@@ -30,7 +30,7 @@ Pin: release o=nginx
 Pin-Priority: 900
 EOF
 apt-get update
-apt-get install -y nginx
+apt-get install -y nginx openssl
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 EORUN
