@@ -32,12 +32,10 @@ if [ ! -d /var/www/html/wordpress ]; then
         set +a
     fi
     if [ -n "$DOMAIN_NAME" ] && [ -n "$WP_TITLE" ] && [ -n "$WP_ADMIN" ] && [ -n "$WP_ADMIN_PASSWORD" ] && [ -n "$WP_ADMIN_EMAIL" ]; then
-        wp core install --url="https://${DOMAIN_NAME}/" --title="${WP_TITLE}" --admin_user="${WP_ADMIN}" --admin_password="${WP_ADMIN_PASSWORD}" --admin_email="${WP_ADMIN_EMAIL}" --path="/var/www/html/wordpress" --allow-root
-        exit 1
+        wp core install --url="https://${DOMAIN_NAME}/" --title="${WP_TITLE}" --admin_user="${WP_ADMIN}" --admin_password="${WP_ADMIN_PASSWORD}" --admin_email="${WP_ADMIN_EMAIL}" --path="/var/www/html/wordpress" --allow-root || echo "Error exit 1" && exit 1
     fi
     if [ -n "$WP_USERNAME" ] && [ -n "$WP_EMAIL" ] && [ -n "$WP_PASSWORD" ] && [ -n "$WP_DISPLYNAME" ]; then
-        wp user create "$WP_USERNAME" "$WP_EMAIL" --role=author --user_pass="$WP_PASSWORD" --display_name="$WP_DISPLYNAME" --path="/var/www/html/wordpress" --allow-root
-        exit 1
+        wp user create "$WP_USERNAME" "$WP_EMAIL" --role=author --user_pass="$WP_PASSWORD" --display_name="$WP_DISPLYNAME" --path="/var/www/html/wordpress" --allow-root || echo "Error exit 1" && exit 1
     fi
 fi
 
