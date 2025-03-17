@@ -2,6 +2,12 @@
 
 set -e
 
+mysql -h "mariadb" -u "${MYSQL_USER}" -p"$(cat /run/secrets/mysql_password)" -e "exit"
+if [ $? -ne 0 ]; then
+    echo "Error: DB connection failure"
+    exit 1
+fi
+
 if [ ! -d /var/www/html ]; then
     mkdir -p /var/www/html
     chown -R www-data:www-data /var/www/html
