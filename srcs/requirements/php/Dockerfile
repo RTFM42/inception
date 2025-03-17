@@ -30,7 +30,7 @@ curl -fsSL https://packages.sury.org/php/apt.gpg | gpg --dearmor -o /etc/apt/tru
 echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 apt-get update
 apt-get upgrade -y
-apt-get install -y unzip curl php-fpm php-mysql php-gd php-cli php-mbstring
+apt-get install -y unzip curl php-fpm php-mysql php-gd php-cli php-mbstring mariadb-client
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 EORUN
