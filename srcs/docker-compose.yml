@@ -13,7 +13,7 @@ services:
     - mysql_password
     - mysql_root_password
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p$(cat /run/secrets/mysql_root_password)"]
       interval: 5s
       timeout: 5s
       retries: 100
@@ -40,7 +40,7 @@ services:
     - wp_credentials
     depends_on:
       mariadb:
-        contition: service_healthy
+        condition: service_healthy
   nginx:
     build:
       context: srcs/requirements/nginx
