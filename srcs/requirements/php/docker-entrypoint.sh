@@ -2,6 +2,22 @@
 
 set -e
 
+function wait_for_db() {
+    local retries=10
+    local wait=5
+    local count=0
+
+    until wp db check --path="/var/www/html/wordpress" --allow-root; do
+        count=$((count+1))
+        echo "DBへの接続を確認中... ($count/$retries)"
+        if [ "$count" -ge "$retries" ]; then
+            echo "DBへの接続に失敗しました。コンテナを終了します。"
+            exit 1
+        fi
+        sleep "$wait"
+    done
+}
+
 if [ ! -d /var/www/html ]; then
     mkdir -p /var/www/html
     chown -R www-data:www-data /var/www/html
@@ -31,6 +47,9 @@ if [ ! -d /var/www/html/wordpress ]; then
         source /run/secrets/wp_credentials
         set +a
     fi
+
+    wait_for_db
+
     if [ -n "$DOMAIN_NAME" ] && [ -n "$WP_TITLE" ] && [ -n "$WP_ADMIN" ] && [ -n "$WP_ADMIN_PASSWORD" ] && [ -n "$WP_ADMIN_EMAIL" ]; then
         wp core install --url="https://${DOMAIN_NAME}/" --title="${WP_TITLE}" --admin_user="${WP_ADMIN}" --admin_password="${WP_ADMIN_PASSWORD}" --admin_email="${WP_ADMIN_EMAIL}" --path="/var/www/html/wordpress" --allow-root || echo "Error exit 1" && exit 1
     fi
